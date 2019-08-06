@@ -191,7 +191,7 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
                     int size = mFrameWidth * mFrameHeight;
                     size  = size * ImageFormat.getBitsPerPixel(params.getPreviewFormat()) / 8;
                     mBuffer = new byte[size];
-
+                    mCamera.setDisplayOrientation(90);
                     mCamera.addCallbackBuffer(mBuffer);
                     mCamera.setPreviewCallbackWithBuffer(this);
 
@@ -210,6 +210,7 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
                         mCamera.setPreviewTexture(mSurfaceTexture);
                     } else
                        mCamera.setPreviewDisplay(null);
+                    mCamera.setPreviewDisplay(getHolder());
 
                     /* Finally we are ready to start the preview */
                     Log.d(TAG, "startPreview");

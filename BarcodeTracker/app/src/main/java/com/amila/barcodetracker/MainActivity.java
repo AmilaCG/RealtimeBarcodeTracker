@@ -3,11 +3,41 @@ package com.amila.barcodetracker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.TextView;
+import android.util.Log;
+import android.view.SurfaceView;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.JavaCameraView;
+import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.imgproc.Imgproc;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
+
+    public static final String TAG = "BarcodeTracker";
+    private JavaCameraView myJavaCameraView;
+    Mat mRgba;
+    Mat mRgbaRot;
+    BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status) {
+                case BaseLoaderCallback.SUCCESS: {
+                    myJavaCameraView.enableView();
+                    break;
+                }
+                default: {
+                    super.onManagerConnected(status);
+                    break;
+                }
+            }
+        }
+    };
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -20,15 +50,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Example of a call to a native method
-        TextView tv = findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
+        myJavaCameraView = (JavaCameraView) findViewById(R.id.MyOpenCvView);
+        myJavaCameraView.setVisibility(SurfaceView.VISIBLE);
+        myJavaCameraView.setCvCameraViewListener(this);
 
-        if (!OpenCVLoader.initDebug()) {
-            tv.setText(tv.getText() + "\nOpenCVLoader.initDebug(), Not working ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (myJavaCameraView != null)
+            myJavaCameraView.disableView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (myJavaCameraView != null)
+            myJavaCameraView.disableView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (OpenCVLoader.initDebug()) {
+            Log.i(TAG, "Opencv loaded successfully");
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         } else {
-            tv.setText(tv.getText() + "\nOpenCVLoader.initDebug(), Working ");
-            tv.setText(tv.getText() + "\n" + validate(0L, 0L));
+            Log.e(TAG, "Opencv not loaded");
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_4_0, this, mLoaderCallback);
         }
     }
 
@@ -38,4 +88,33 @@ public class MainActivity extends AppCompatActivity {
      */
     public native String stringFromJNI();
     public native String validate(long matAddrGr, long matAddrRgba);
+
+    @Override
+    public void onCameraViewStarted(int width, int height) {
+        mRgba = new Mat(height, width, CvType.CV_8UC4);
+    }
+
+    @Override
+    public void onCameraViewStopped() {
+        mRgba.release();
+        mRgbaRot.release();
+    }
+
+    @Override
+    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+        mRgba = inputFrame.rgba();
+        mRgbaRot = new Mat(mRgba.rows(), mRgba.cols(), mRgba.type());
+        rotate(mRgba, mRgbaRot, -90);
+        return mRgbaRot;
+    }
+
+    void rotate (Mat src, Mat dst, int deg) {
+        //Core.transpose(src, dst);
+        //Core.flip(dst, dst, deg);
+        Mat rotMat = new Mat(2, 3, CvType.CV_32FC1);
+        Point center = new Point(dst.cols()/2, dst.rows()/2);
+        rotMat = Imgproc.getRotationMatrix2D(center, deg, 1);
+        Imgproc.warpAffine(src, dst, rotMat, dst.size());
+    }
+
 }

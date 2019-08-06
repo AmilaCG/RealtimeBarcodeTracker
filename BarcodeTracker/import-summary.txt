@@ -14,6 +14,7 @@ so manually move them:
 * javadoc/help-doc.html
 * javadoc/index-all.html
 * javadoc/index.html
+* javadoc/mymath.js
 * javadoc/org/
 * javadoc/org/opencv/
 * javadoc/org/opencv/android/
@@ -30,6 +31,7 @@ so manually move them:
 * javadoc/org/opencv/android/CameraRenderer.html
 * javadoc/org/opencv/android/FpsMeter.html
 * javadoc/org/opencv/android/InstallCallbackInterface.html
+* javadoc/org/opencv/android/JavaCamera2View.JavaCameraSizeAccessor.html
 * javadoc/org/opencv/android/JavaCamera2View.html
 * javadoc/org/opencv/android/JavaCameraView.JavaCameraSizeAccessor.html
 * javadoc/org/opencv/android/JavaCameraView.html
@@ -111,6 +113,7 @@ so manually move them:
 * javadoc/org/opencv/features2d/MSER.html
 * javadoc/org/opencv/features2d/ORB.html
 * javadoc/org/opencv/features2d/Params.html
+* javadoc/org/opencv/features2d/SimpleBlobDetector.html
 * javadoc/org/opencv/features2d/package-frame.html
 * javadoc/org/opencv/features2d/package-summary.html
 * javadoc/org/opencv/features2d/package-tree.html
@@ -121,6 +124,9 @@ so manually move them:
 * javadoc/org/opencv/imgcodecs/package-tree.html
 * javadoc/org/opencv/imgproc/
 * javadoc/org/opencv/imgproc/CLAHE.html
+* javadoc/org/opencv/imgproc/GeneralizedHough.html
+* javadoc/org/opencv/imgproc/GeneralizedHoughBallard.html
+* javadoc/org/opencv/imgproc/GeneralizedHoughGuil.html
 * javadoc/org/opencv/imgproc/Imgproc.html
 * javadoc/org/opencv/imgproc/LineSegmentDetector.html
 * javadoc/org/opencv/imgproc/Moments.html
@@ -152,6 +158,7 @@ so manually move them:
 * javadoc/org/opencv/objdetect/CascadeClassifier.html
 * javadoc/org/opencv/objdetect/HOGDescriptor.html
 * javadoc/org/opencv/objdetect/Objdetect.html
+* javadoc/org/opencv/objdetect/QRCodeDetector.html
 * javadoc/org/opencv/objdetect/package-frame.html
 * javadoc/org/opencv/objdetect/package-summary.html
 * javadoc/org/opencv/objdetect/package-tree.html
@@ -174,7 +181,6 @@ so manually move them:
 * javadoc/org/opencv/photo/Photo.html
 * javadoc/org/opencv/photo/Tonemap.html
 * javadoc/org/opencv/photo/TonemapDrago.html
-* javadoc/org/opencv/photo/TonemapDurand.html
 * javadoc/org/opencv/photo/TonemapMantiuk.html
 * javadoc/org/opencv/photo/TonemapReinhard.html
 * javadoc/org/opencv/photo/package-frame.html
@@ -223,11 +229,11 @@ Moved Files:
 Android Gradle projects use a different directory structure than ADT
 Eclipse projects. Here's how the projects were restructured:
 
-* AndroidManifest.xml => openCVLibrary343/src/main/AndroidManifest.xml
-* lint.xml => openCVLibrary343/lint.xml
-* res/ => openCVLibrary343/src/main/res/
-* src/ => openCVLibrary343/src/main/java/
-* src/org/opencv/engine/OpenCVEngineInterface.aidl => openCVLibrary343/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl
+* AndroidManifest.xml => openCVLibrary347/src/main/AndroidManifest.xml
+* lint.xml => openCVLibrary347/lint.xml
+* res/ => openCVLibrary347/src/main/res/
+* src/ => openCVLibrary347/src/main/java/
+* src/org/opencv/engine/OpenCVEngineInterface.aidl => openCVLibrary347/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl
 
 Next Steps:
 -----------

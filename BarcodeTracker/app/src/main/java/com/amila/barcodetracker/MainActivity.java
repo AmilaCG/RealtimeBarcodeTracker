@@ -97,21 +97,21 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     @Override
     public void onCameraViewStopped() {
         mRgba.release();
-        mRgbaRot.release();
+        //mRgbaRot.release();
     }
 
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
-        mRgbaRot = new Mat(mRgba.rows(), mRgba.cols(), mRgba.type());
-        rotate(mRgba, mRgbaRot, -90);
-        return mRgbaRot;
+        //mRgbaRot = new Mat(mRgba.rows(), mRgba.cols(), mRgba.type());
+        //rotate(mRgba, mRgbaRot, -90);
+        return mRgba;
     }
 
     void rotate (Mat src, Mat dst, int deg) {
         //Core.transpose(src, dst);
         //Core.flip(dst, dst, deg);
-        Mat rotMat = new Mat(2, 3, CvType.CV_32FC1);
+        Mat rotMat;
         Point center = new Point(dst.cols()/2, dst.rows()/2);
         rotMat = Imgproc.getRotationMatrix2D(center, deg, 1);
         Imgproc.warpAffine(src, dst, rotMat, dst.size());

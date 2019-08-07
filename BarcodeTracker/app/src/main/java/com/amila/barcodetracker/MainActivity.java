@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     public static final String TAG = "BarcodeTracker";
     private JavaCameraView myJavaCameraView;
     Mat mRgba;
-    Mat mRgbaRot;
+
     BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
@@ -99,14 +99,12 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     @Override
     public void onCameraViewStopped() {
         mRgba.release();
-        //mRgbaRot.release();
     }
 
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
-        //mRgbaRot = new Mat(mRgba.rows(), mRgba.cols(), mRgba.type());
-        //rotate(mRgba, mRgbaRot, -90);
+
         return mRgba;
     }
 

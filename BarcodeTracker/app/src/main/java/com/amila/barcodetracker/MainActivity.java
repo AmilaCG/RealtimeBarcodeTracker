@@ -15,6 +15,7 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 public class MainActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
@@ -22,6 +23,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     public static final String TAG = "BarcodeTracker";
     private JavaCameraView myJavaCameraView;
     private Mat mRgba;
+    private Mat mProcessed;
 
     BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
@@ -92,6 +94,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     @Override
     public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat(height, width, CvType.CV_8UC1);
+        mProcessed = new Mat();
     }
 
     @Override
@@ -103,7 +106,42 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
 
-        return mRgba;
+        mProcessed = doSobel(mRgba);
+
+        return mProcessed;
+    }
+
+    private Mat doSobel(Mat frame) {
+        Mat grayImage = new Mat();
+        Mat detectedEdges = new Mat();
+        int ddepth = CvType.CV_16S;
+        Mat gradX = new Mat();
+        Mat gradY = new Mat();
+        Mat absGradX = new Mat();
+        Mat absGradY = new Mat();
+
+        // Convert to grayscale
+        Imgproc.cvtColor(frame, grayImage, Imgproc.COLOR_BGR2GRAY);
+
+        // Reduce noise with a 3x3 kernel
+        //Imgproc.GaussianBlur(frame, frame, new Size(3, 3), 0, 0, Core.BORDER_DEFAULT);
+        Imgproc.blur(frame, frame, new Size(9, 9));
+
+        // Gradient X
+        Imgproc.Sobel(grayImage, gradX, ddepth, 1, 0);
+        Core.convertScaleAbs(gradX, absGradX);
+
+        // Gradient Y
+        Imgproc.Sobel(grayImage, gradY, ddepth, 0, 1);
+        Core.convertScaleAbs(gradY, absGradY);
+
+        // Total Gradient (approximate)
+        Core.addWeighted(absGradX, 0.5, absGradY, 0.5, 0, detectedEdges);
+
+        //Core.subtract(gradX, gradY, detectedEdges);
+        //Core.convertScaleAbs(detectedEdges, detectedEdges);
+
+        return detectedEdges;
     }
 
     void rotate (Mat src, Mat dst, int deg) {

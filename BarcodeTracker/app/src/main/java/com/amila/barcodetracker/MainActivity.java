@@ -1,7 +1,6 @@
 package com.amila.barcodetracker;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -18,11 +17,11 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
-public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
+public class MainActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     public static final String TAG = "BarcodeTracker";
     private JavaCameraView myJavaCameraView;
-    Mat mRgba;
+    private Mat mRgba;
 
     BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
@@ -55,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         myJavaCameraView = (JavaCameraView) findViewById(R.id.MyOpenCvView);
         myJavaCameraView.setVisibility(SurfaceView.VISIBLE);
         myJavaCameraView.setCvCameraViewListener(this);
-
     }
 
     @Override
@@ -93,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     @Override
     public void onCameraViewStarted(int width, int height) {
-        mRgba = new Mat(height, width, CvType.CV_8UC4);
+        mRgba = new Mat(height, width, CvType.CV_8UC1);
     }
 
     @Override

@@ -191,7 +191,6 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
                     int size = mFrameWidth * mFrameHeight;
                     size  = size * ImageFormat.getBitsPerPixel(params.getPreviewFormat()) / 8;
                     mBuffer = new byte[size];
-                    mCamera.setDisplayOrientation(90);
                     mCamera.addCallbackBuffer(mBuffer);
                     mCamera.setPreviewCallbackWithBuffer(this);
 
@@ -210,7 +209,6 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
                         mCamera.setPreviewTexture(mSurfaceTexture);
                     } else
                        mCamera.setPreviewDisplay(null);
-                    mCamera.setPreviewDisplay(getHolder());
 
                     /* This is a hack to get the camera preview in portrait mode */
                     mCamera.setDisplayOrientation(90);

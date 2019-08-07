@@ -211,8 +211,8 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
                        mCamera.setPreviewDisplay(null);
 
                     /* This is a hack to get the camera preview in portrait mode */
-                    mCamera.setDisplayOrientation(90);
-                    mCamera.setPreviewDisplay(getHolder());
+                    //mCamera.setDisplayOrientation(90);
+                    //mCamera.setPreviewDisplay(getHolder());
 
                     /* Finally we are ready to start the preview */
                     Log.d(TAG, "startPreview");

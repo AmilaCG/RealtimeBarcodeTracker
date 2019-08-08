@@ -2,6 +2,7 @@ package com.amila.barcodetracker;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.WindowManager;
@@ -108,7 +109,24 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
         mProcessed = extractGradients(mRgba);
 
+        mProcessed = cleanUp(mProcessed);
+
         return mProcessed;
+    }
+
+    private Mat cleanUp (Mat frame) {
+        Mat kernel;
+        Mat thresh = new Mat();
+        Mat closed = new Mat();
+
+        // Reducing noise further by using threshold
+        Imgproc.threshold(frame, thresh, 120, 255, Imgproc.THRESH_BINARY);
+
+        kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(21,7));
+
+        Imgproc.morphologyEx(thresh, closed, Imgproc.MORPH_CLOSE, kernel);
+
+        return closed;
     }
 
     private Mat extractGradients(Mat frame) {

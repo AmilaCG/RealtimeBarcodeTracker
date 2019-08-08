@@ -106,12 +106,12 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
 
-        mProcessed = doSobel(mRgba);
+        mProcessed = extractGradients(mRgba);
 
         return mProcessed;
     }
 
-    private Mat doSobel(Mat frame) {
+    private Mat extractGradients(Mat frame) {
         Mat grayImage = new Mat();
         Mat detectedEdges = new Mat();
         int ddepth = CvType.CV_16S;
@@ -122,10 +122,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
         // Convert to grayscale
         Imgproc.cvtColor(frame, grayImage, Imgproc.COLOR_BGR2GRAY);
-
-        // Reduce noise with a 3x3 kernel
-        //Imgproc.GaussianBlur(frame, frame, new Size(3, 3), 0, 0, Core.BORDER_DEFAULT);
-        Imgproc.blur(frame, frame, new Size(9, 9));
 
         // Gradient X
         Imgproc.Sobel(grayImage, gradX, ddepth, 1, 0);
@@ -140,6 +136,10 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
         //Core.subtract(gradX, gradY, detectedEdges);
         //Core.convertScaleAbs(detectedEdges, detectedEdges);
+
+        // Reduce noise with a 3x3 kernel
+        Imgproc.GaussianBlur(detectedEdges, detectedEdges, new Size(3, 3), 0, 0, Core.BORDER_DEFAULT);
+        //Imgproc.blur(detectedEdges, detectedEdges, new Size(9, 9));
 
         return detectedEdges;
     }

@@ -2,7 +2,6 @@ package com.amila.barcodetracker;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.WindowManager;
@@ -16,6 +15,7 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
@@ -24,7 +24,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     public static final String TAG = "BarcodeTracker";
     private JavaCameraView myJavaCameraView;
     private Mat mRgba;
-    private Mat mProcessed;
 
     BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
@@ -95,7 +94,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     @Override
     public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat(height, width, CvType.CV_8UC1);
-        mProcessed = new Mat();
     }
 
     @Override
@@ -107,26 +105,36 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
 
-        mProcessed = extractGradients(mRgba);
+        return drawBoundingBox(mRgba);
+    }
 
-        mProcessed = cleanUp(mProcessed);
+    private Mat drawBoundingBox (Mat frame) {
+        frame = extractGradients(frame);
+        frame = cleanUp(frame);
 
-        return mProcessed;
+        //Imgproc.rectangle(frame, new Point(100, 200), new Point(100 + 50, 200 + 50), new Scalar(255, 0, 0), 5);
+
+        return frame;
     }
 
     private Mat cleanUp (Mat frame) {
         Mat kernel;
         Mat thresh = new Mat();
-        Mat closed = new Mat();
+        Mat cleaned = new Mat();
+        Mat anchor = new Mat();
 
         // Reducing noise further by using threshold
         Imgproc.threshold(frame, thresh, 120, 255, Imgproc.THRESH_BINARY);
 
+        // Close gaps using a closing kernel
         kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(21,7));
+        Imgproc.morphologyEx(thresh, cleaned, Imgproc.MORPH_CLOSE, kernel);
 
-        Imgproc.morphologyEx(thresh, closed, Imgproc.MORPH_CLOSE, kernel);
+        // Perform erosions and dilations
+        Imgproc.erode(cleaned, cleaned, anchor, new Point(-1, -1), 4);
+        Imgproc.dilate(cleaned, cleaned, anchor, new Point(-1, -1), 4);
 
-        return closed;
+        return cleaned;
     }
 
     private Mat extractGradients(Mat frame) {

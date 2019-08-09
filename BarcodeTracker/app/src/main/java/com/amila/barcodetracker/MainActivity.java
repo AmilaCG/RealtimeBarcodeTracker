@@ -2,7 +2,6 @@ package com.amila.barcodetracker;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.WindowManager;

@@ -2,6 +2,7 @@ package com.amila.barcodetracker;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.WindowManager;
@@ -117,6 +118,8 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         Mat hierarchy = new Mat();
         Mat drawing;
         Scalar colour = new Scalar(0, 255, 0);
+        double maxArea = 0;
+        int largestContIndex = 0;
 
         frame = extractGradients(frame);
         frame = cleanUp(frame);
@@ -126,12 +129,18 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
         //Point[] cont = contours.get(0).toArray();
         //Log.e(TAG, "[Amila] contours.size(): " + contours.size());
+        //Log.e(TAG, "[Amila] contour area: " + Imgproc.contourArea(contours.get(0)));
 
         drawing = Mat.zeros(frame.size(), CvType.CV_8UC3);
         for (int i = 0; i < contours.size(); i++) {
-            Imgproc.drawContours(drawing, contours, i, colour, 2, Core.LINE_8, hierarchy, 0, new Point());
+            double contourArea = Imgproc.contourArea(contours.get(i));
+            //Imgproc.drawContours(drawing, contours, i, colour, 2, Core.LINE_8, hierarchy, 0, new Point());
+            if (maxArea < contourArea) {
+                maxArea = contourArea;
+                largestContIndex = i;
+            }
         }
-        //Imgproc.drawContours(drawing, contours, 0, colour, 2, Core.LINE_8, hierarchy, 0, new Point());
+        Imgproc.drawContours(drawing, contours, largestContIndex, colour, 2, Core.LINE_8, hierarchy, 0, new Point());
 
         return drawing;
     }

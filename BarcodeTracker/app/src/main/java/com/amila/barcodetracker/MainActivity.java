@@ -14,10 +14,14 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -109,12 +113,27 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     }
 
     private Mat drawBoundingBox (Mat frame) {
+        List<MatOfPoint> contours = new ArrayList<>();
+        Mat hierarchy = new Mat();
+        Mat drawing;
+        Scalar colour = new Scalar(0, 255, 0);
+
         frame = extractGradients(frame);
         frame = cleanUp(frame);
 
-        //Imgproc.rectangle(frame, new Point(100, 200), new Point(100 + 50, 200 + 50), new Scalar(255, 0, 0), 5);
+        // Extract all contours
+        Imgproc.findContours(frame, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        return frame;
+        //Point[] cont = contours.get(0).toArray();
+        //Log.e(TAG, "[Amila] contours.size(): " + contours.size());
+
+        drawing = Mat.zeros(frame.size(), CvType.CV_8UC3);
+        for (int i = 0; i < contours.size(); i++) {
+            Imgproc.drawContours(drawing, contours, i, colour, 2, Core.LINE_8, hierarchy, 0, new Point());
+        }
+        //Imgproc.drawContours(drawing, contours, 0, colour, 2, Core.LINE_8, hierarchy, 0, new Point());
+
+        return drawing;
     }
 
     private Mat cleanUp (Mat frame) {

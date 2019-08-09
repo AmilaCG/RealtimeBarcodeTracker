@@ -109,17 +109,16 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
-
         return drawBoundingBox(mRgba);
     }
 
     private Mat drawBoundingBox (Mat frame) {
         List<MatOfPoint> contours = new ArrayList<>();
         Mat hierarchy = new Mat();
-        Mat drawing;
         Scalar colour = new Scalar(0, 255, 0);
         double maxArea = 0;
         int largestContIndex = 0;
+        Mat image = frame;
 
         frame = extractGradients(frame);
         frame = cleanUp(frame);
@@ -127,11 +126,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         // Extract all contours
         Imgproc.findContours(frame, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        //Point[] cont = contours.get(0).toArray();
-        //Log.e(TAG, "[Amila] contours.size(): " + contours.size());
-        //Log.e(TAG, "[Amila] contour area: " + Imgproc.contourArea(contours.get(0)));
-
-        drawing = Mat.zeros(frame.size(), CvType.CV_8UC3);
+        // Find the largest contour
         for (int i = 0; i < contours.size(); i++) {
             double contourArea = Imgproc.contourArea(contours.get(i));
             //Imgproc.drawContours(drawing, contours, i, colour, 2, Core.LINE_8, hierarchy, 0, new Point());
@@ -140,9 +135,10 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                 largestContIndex = i;
             }
         }
-        Imgproc.drawContours(drawing, contours, largestContIndex, colour, 2, Core.LINE_8, hierarchy, 0, new Point());
+        // Draw the largest contour
+        Imgproc.drawContours(image, contours, largestContIndex, colour, 2, Core.LINE_8, hierarchy, 0, new Point());
 
-        return drawing;
+        return image;
     }
 
     private Mat cleanUp (Mat frame) {

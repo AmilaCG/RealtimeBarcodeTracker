@@ -45,12 +45,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         }
     };
 
-    // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
-        System.loadLibrary("opencv_java3");
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,13 +81,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_4_0, this, mLoaderCallback);
         }
     }
-
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
-    public native String validate(long matAddrGr, long matAddrRgba);
 
     @Override
     public void onCameraViewStarted(int width, int height) {

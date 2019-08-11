@@ -1,5 +1,5 @@
-set(pathToProject /home/amila/OpenCV/Android/OpenCVTest)
-set(pathToOpenCv /home/amila/OpenCV/OpenCV-android-sdk)
+#set(pathToProject /home/amila/OpenCV/Android/OpenCVTest)
+set(OPENCV_SOURCE_DIR /home/amila/OpenCV/OpenCV-android-sdk)
 
 # For more information about using CMake with Android Studio, read the
 # documentation: https://d.android.com/studio/projects/add-native-code.html
@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 3.4.1)
 set(CMAKE_VERBOSE_MAKEFILE  on)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
-include_directories(${pathToOpenCv}/sdk/native/jni/include)
+include_directories(${OPENCV_SOURCE_DIR}/sdk/native/jni/include)
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
@@ -28,7 +28,7 @@ add_library( # Sets the name of the library.
         native-lib.cpp)
 
 add_library(lib_opencv SHARED IMPORTED)
-set_target_properties(lib_opencv PROPERTIES IMPORTED_LOCATION ${pathToProject}/app/src/main/jniLibs/${ANDROID_ABI}/libopencv_java3.so)
+set_target_properties(lib_opencv PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libopencv_java3.so)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by

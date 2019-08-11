@@ -1,54 +1,25 @@
 package com.amila.barcodetracker;
 
 import android.app.Activity;
+import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.WindowManager;
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.JavaCameraView;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
+import androidx.core.app.ActivityCompat;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MainActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
+public class MainActivity extends Activity
+        implements TextureView.SurfaceTextureListener,
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     public static final String TAG = "BarcodeTracker";
-    private JavaCameraView myJavaCameraView;
-    private Mat mRgba;
-
-    BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
-        @Override
-        public void onManagerConnected(int status) {
-            switch (status) {
-                case BaseLoaderCallback.SUCCESS: {
-                    myJavaCameraView.enableView();
-                    break;
-                }
-                default: {
-                    super.onManagerConnected(status);
-                    break;
-                }
-            }
-        }
-    };
 
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
         System.loadLibrary("opencv_java3");
+        System.loadLibrary("camera_textureview");
     }
 
     @Override
@@ -57,35 +28,22 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        myJavaCameraView = (JavaCameraView) findViewById(R.id.MyOpenCvView);
-        myJavaCameraView.setVisibility(SurfaceView.VISIBLE);
-        myJavaCameraView.setCvCameraViewListener(this);
+        Log.e(TAG, "Amila " + validateCam(0, 0));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (myJavaCameraView != null)
-            myJavaCameraView.disableView();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (myJavaCameraView != null)
-            myJavaCameraView.disableView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (OpenCVLoader.initDebug()) {
-            Log.i(TAG, "Opencv loaded successfully");
-            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-        } else {
-            Log.e(TAG, "Opencv not loaded");
-            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_4_0, this, mLoaderCallback);
-        }
     }
 
     /**
@@ -93,24 +51,30 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
      * which is packaged with this application.
      */
     public native String stringFromJNI();
-    public native String validate(long matAddrGr, long matAddrRgba);
+    public native String validateCam(long matAddrGr, long matAddrRgba);
 
     @Override
-    public void onCameraViewStarted(int width, int height) {
-        mRgba = new Mat(height, width, CvType.CV_8UC1);
+    public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
+
     }
 
     @Override
-    public void onCameraViewStopped() {
-        mRgba.release();
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i1) {
+
     }
 
     @Override
-    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-        mRgba = inputFrame.rgba();
-        return drawBoundingBox(mRgba);
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+        return false;
     }
 
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+
+    }
+
+
+/*
     private Mat drawBoundingBox (Mat frame) {
         List<MatOfPoint> contours = new ArrayList<>();
         Mat hierarchy = new Mat();
@@ -201,5 +165,5 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         rotMat = Imgproc.getRotationMatrix2D(center, deg, 1);
         Imgproc.warpAffine(src, dst, rotMat, dst.size());
     }
-
+*/
 }

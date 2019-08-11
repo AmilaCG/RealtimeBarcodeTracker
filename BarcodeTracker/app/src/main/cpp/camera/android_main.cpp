@@ -25,6 +25,7 @@
 #include <jni.h>
 #include <cstring>
 #include <utils/native_debug.h>
+#include <opencv2/core.hpp>
 #include "camera_manager.h"
 #include "camera_engine.h"
 
@@ -33,6 +34,16 @@
  *   the top level camera application object, maintained by native code only
  */
 CameraAppEngine *pEngineObj = nullptr;
+
+extern "C" {
+jstring Java_com_amila_barcodetracker_MainActivity_validateCam(
+        JNIEnv *env, jobject, jlong addrGray, jlong addrRgba) {
+  cv::Rect();
+  cv::Mat();
+  std::string hello2 = "hello from libtexture_view.so";
+  return env->NewStringUTF(hello2.c_str());
+}
+}
 
 /**
  * createCamera() Create application instance and NDK camera object

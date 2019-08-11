@@ -59,7 +59,7 @@ jstring Java_com_amila_barcodetracker_MainActivity_validateCam(
  * @return application object instance ( not used in this sample )
  */
 extern "C" JNIEXPORT jlong JNICALL
-Java_com_sample_textureview_ViewActivity_createCamera(JNIEnv *env,
+Java_com_amila_barcodetracker_MainActivity_createCamera(JNIEnv *env,
                                                       jobject instance,
                                                       jint width, jint height) {
   pEngineObj = new CameraAppEngine(env, instance, width, height);
@@ -72,7 +72,7 @@ Java_com_sample_textureview_ViewActivity_createCamera(JNIEnv *env,
  *   triggers native camera object be released
  */
 extern "C" JNIEXPORT void JNICALL
-Java_com_sample_textureview_ViewActivity_deleteCamera(JNIEnv *env,
+Java_com_amila_barcodetracker_MainActivity_deleteCamera(JNIEnv *env,
                                                       jobject instance,
                                                       jlong ndkCameraObj) {
   if (!pEngineObj || !ndkCameraObj) {
@@ -99,7 +99,7 @@ Java_com_sample_textureview_ViewActivity_deleteCamera(JNIEnv *env,
  *      on display device
  */
 extern "C" JNIEXPORT jobject JNICALL
-Java_com_sample_textureview_ViewActivity_getMinimumCompatiblePreviewSize(
+Java_com_amila_barcodetracker_MainActivity_getMinimumCompatiblePreviewSize(
     JNIEnv *env, jobject instance, jlong ndkCameraObj) {
   if (!ndkCameraObj) {
     return nullptr;
@@ -119,7 +119,7 @@ Java_com_sample_textureview_ViewActivity_getMinimumCompatiblePreviewSize(
  * display orientation. This sample only deal to back facing camera.
  */
 extern "C" JNIEXPORT jint JNICALL
-Java_com_sample_textureview_ViewActivity_getCameraSensorOrientation(
+Java_com_amila_barcodetracker_MainActivity_getCameraSensorOrientation(
     JNIEnv *env, jobject instance, jlong ndkCameraObj) {
   ASSERT(ndkCameraObj, "NativeObject should not be null Pointer");
   CameraAppEngine *pApp = reinterpret_cast<CameraAppEngine *>(ndkCameraObj);
@@ -133,7 +133,7 @@ Java_com_sample_textureview_ViewActivity_getCameraSensorOrientation(
  *   start camera preview
  */
 extern "C" JNIEXPORT void JNICALL
-Java_com_sample_textureview_ViewActivity_onPreviewSurfaceCreated(
+Java_com_amila_barcodetracker_MainActivity_onPreviewSurfaceCreated(
     JNIEnv *env, jobject instance, jlong ndkCameraObj, jobject surface) {
   ASSERT(ndkCameraObj && (jlong)pEngineObj == ndkCameraObj,
          "NativeObject should not be null Pointer");
@@ -149,7 +149,7 @@ Java_com_sample_textureview_ViewActivity_onPreviewSurfaceCreated(
  *      * stop preview
  */
 extern "C" JNIEXPORT void JNICALL
-Java_com_sample_textureview_ViewActivity_onPreviewSurfaceDestroyed(
+Java_com_amila_barcodetracker_MainActivity_onPreviewSurfaceDestroyed(
     JNIEnv *env, jobject instance, jlong ndkCameraObj, jobject surface) {
   CameraAppEngine *pApp = reinterpret_cast<CameraAppEngine *>(ndkCameraObj);
   ASSERT(ndkCameraObj && pEngineObj == pApp,

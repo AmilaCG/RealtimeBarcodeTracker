@@ -16,9 +16,9 @@ add_library(camera_textureview SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/camera/camera_manager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/camera/camera_engine.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/camera/camera_listeners.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utils/camera_utils.cpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/utils/camera_utils.cpp)
 
-target_include_directories(camera_textureview PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/utils})
+target_include_directories(camera_textureview PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
 
 add_library( # Sets the name of the library.
@@ -49,3 +49,8 @@ target_link_libraries( # Specifies the target library.
         android
         m
         camera2ndk)
+
+target_link_libraries( # Specifies the target library.
+        native-lib
+        ${log-lib}
+        opencv)

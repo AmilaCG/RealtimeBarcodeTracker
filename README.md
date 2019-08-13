@@ -1,4 +1,4 @@
-# RealtimeBarcodeTracking
+# Realtime Barcode Tracker
 The goal of this project is to track and decode multiple barcodes and show bounding boxes around them.
 
 Currently this can detect a single barcode and display a bounding box around it in realtime.  

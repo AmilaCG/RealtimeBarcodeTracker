@@ -6,7 +6,7 @@
 
 // used to get logcat outputs which can be regex filtered by the LOG_TAG we give
 // So in Logcat you can filter this example by putting OpenCV-NDK
-#define LOG_TAG "OpenCV-NDK-Native"
+#define LOG_TAG "NativeBarcodeTracker"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 #define ASSERT(cond, fmt, ...)                                \

@@ -1,7 +1,3 @@
-//
-// Created by fricke on 8/20/17.
-//
-
 #ifndef OPENCV_NDK_UTIL_H
 #define OPENCV_NDK_UTIL_H
 

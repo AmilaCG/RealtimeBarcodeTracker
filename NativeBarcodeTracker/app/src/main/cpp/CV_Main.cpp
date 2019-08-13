@@ -107,16 +107,70 @@ void CV_Main::CameraLoop() {
 
         ANativeWindow_unlockAndPost(m_native_window);
         ANativeWindow_release(m_native_window);
+        ReleaseMats();
     }
 }
 
 void CV_Main::BarcodeDetect(Mat &frame) {
+    int ddepth = CV_16S;
+    double contour_area = 0;
+    double max_area = 0;
+    int largest_cont_index = 0;
 
-    vector<Rect> faces;
-    Mat frame_gray;
-
+    // Convert to grayscale
     cvtColor(frame, frame_gray, CV_RGBA2GRAY);
 
-    //ellipse(frame, Point(100, 100), Size(10, 10), 0, 0, 360, CV_PURPLE, 4, 8, 0);
+    // Gradient X
+    Sobel(frame_gray, grad_x, ddepth, 1, 0);
+    convertScaleAbs(grad_x, abs_grad_x);
+    // Gradient Y
+    Sobel(frame_gray, grad_y, ddepth, 0, 1);
+    convertScaleAbs(grad_y, abs_grad_y);
 
+    // Total Gradient (approximate)
+    addWeighted(abs_grad_x, 0.5, abs_grad_x, 0.5, 0, detected_edges);
+
+    // Reduce noise with a 3x3 kernel
+    GaussianBlur(detected_edges, detected_edges, Size(3,3), 0, 0, BORDER_DEFAULT);
+
+    // Reducing noise further by using threshold
+    threshold(detected_edges, thresh, 120, 255, CV_THRESH_BINARY);
+
+    // Close gaps using a closing kernel
+    kernel = getStructuringElement(MORPH_RECT, Size(21,7));
+    morphologyEx(thresh, cleaned, MORPH_CLOSE, kernel);
+
+    // Perform erosions and dilations
+    erode(cleaned, cleaned, anchor, Point(-1,-1), 4);
+    dilate(cleaned, cleaned, anchor, Point(-1,-1), 4);
+
+    // Extract all contours
+    findContours(cleaned, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+    // Find the largest contour
+    for (int i = 0; i < contours.size(); i++) {
+        //drawContours(frame, contours, i, CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
+        if (max_area < contour_area) {
+            max_area = contour_area;
+            largest_cont_index = i;
+        }
+    }
+
+    // Draw the largest contour
+    drawContours(frame, contours, largest_cont_index, CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
+}
+
+void CV_Main::ReleaseMats() {
+    display_mat.release();
+    frame_gray.release();
+    grad_x.release();
+    abs_grad_x.release();
+    grad_y.release();
+    abs_grad_y.release();
+    detected_edges.release();
+    thresh.release();
+    kernel.release();
+    anchor.release();
+    cleaned.release();
+    hierarchy.release();
 }

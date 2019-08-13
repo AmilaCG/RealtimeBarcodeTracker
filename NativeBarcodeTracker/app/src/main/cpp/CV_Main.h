@@ -8,8 +8,6 @@
 // OpenCV
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
-#include <opencv2/objdetect.hpp>
-#include <opencv2/features2d.hpp>
 // OpenCV-NDK App
 #include "Image_Reader.h"
 #include "Native_Camera.h"
@@ -22,6 +20,9 @@
 #include <string>
 #include <vector>
 #include <thread>
+
+using namespace cv;
+using namespace std;
 
 class CV_Main {
 public:
@@ -59,7 +60,9 @@ public:
 
     void CameraLoop();
 
-    void BarcodeDetect(cv::Mat &frame);
+    void BarcodeDetect(Mat &frame);
+
+    void ReleaseMats();
 
 private:
     // Cached Java VM, caller activity object
@@ -89,12 +92,25 @@ private:
     AAssetManager *m_aasset_manager;
 
     // OpenCV values
-    cv::Mat display_mat;
+    Mat display_mat;
+    Mat frame_gray;
+    Mat grad_x;
+    Mat abs_grad_x;
+    Mat grad_y;
+    Mat abs_grad_y;
+    Mat detected_edges;
+    Mat thresh;
+    Mat kernel;
+    Mat anchor;
+    Mat cleaned;
+    Mat hierarchy;
 
-    cv::Scalar CV_PURPLE = cv::Scalar(255, 0, 255);
-    cv::Scalar CV_RED = cv::Scalar(255, 0, 0);
-    cv::Scalar CV_GREEN = cv::Scalar(0, 255, 0);
-    cv::Scalar CV_BLUE = cv::Scalar(0, 0, 255);
+    vector<vector<Point>> contours;
+
+    Scalar CV_PURPLE = Scalar(255, 0, 255);
+    Scalar CV_RED = Scalar(255, 0, 0);
+    Scalar CV_GREEN = Scalar(0, 255, 0);
+    Scalar CV_BLUE = Scalar(0, 0, 255);
 
     bool m_camera_thread_stopped = false;
 };

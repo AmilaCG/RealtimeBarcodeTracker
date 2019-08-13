@@ -1,9 +1,9 @@
 package com.amilaabeygunasekara.nativebarcodetracker;
 
 import android.app.Activity;
-import android.graphics.Canvas;
-import android.graphics.Color;
+import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
@@ -11,7 +11,7 @@ import android.view.WindowManager;
 public class MainActivity extends Activity {
 
     static {
-        System.loadLibrary("native-lib");
+        System.loadLibrary("native-tracker");
     }
 
     public static final String TAG = "NativeBarcodeTracker";
@@ -25,17 +25,21 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        // send class activity and assest fd to native code
+        onCreateJNI(this, getAssets());
+
         mSurfaceView = (SurfaceView)findViewById(R.id.texturePreview);
         mSurfaceHolder = mSurfaceView.getHolder();
 
         mSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
-                Canvas canvas = mSurfaceHolder.lockCanvas();
+                /*Canvas canvas = mSurfaceHolder.lockCanvas();
                 if (canvas != null) {
                     canvas.drawColor(Color.BLUE);
                     mSurfaceHolder.unlockCanvasAndPost(canvas);
-                }
+                }*/
+                setSurface(surfaceHolder.getSurface());
             }
 
             @Override
@@ -50,5 +54,7 @@ public class MainActivity extends Activity {
         });
     }
 
-    public native String stringFromJNI();
+    public native void onCreateJNI(Activity callerActivity, AssetManager assetManager);
+    // Sends surface buffer to NDK
+    public native void setSurface(Surface surface);
 }

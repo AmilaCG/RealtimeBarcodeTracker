@@ -54,7 +54,15 @@ public class MainActivity extends Activity {
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        releaseCVMain();
+    }
+
     public native void onCreateJNI(Activity callerActivity, AssetManager assetManager);
     // Sends surface buffer to NDK
     public native void setSurface(Surface surface);
+
+    public native void releaseCVMain();
 }

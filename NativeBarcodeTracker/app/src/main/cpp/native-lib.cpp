@@ -38,6 +38,13 @@ Java_com_amilaabeygunasekara_nativebarcodetracker_MainActivity_setSurface(JNIEnv
     loopThread.detach();
 }
 
+// Destruct CV_Main
+JNIEXPORT void JNICALL
+Java_com_amilaabeygunasekara_nativebarcodetracker_MainActivity_releaseCVMain(JNIEnv *env,
+                                                                             jclass clazz) {
+    app.~CV_Main();
+}
+
 #ifdef __cplusplus
 }
 #endif

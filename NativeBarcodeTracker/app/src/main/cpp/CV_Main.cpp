@@ -114,6 +114,9 @@ void CV_Main::BarcodeDetect(Mat &frame) {
     // Reducing noise further by using threshold
     threshold(detected_edges, thresh, 120, 255, CV_THRESH_BINARY);
 
+    // Otsu's threshold
+    threshold(thresh, thresh, 0, 255, CV_THRESH_BINARY+THRESH_OTSU);
+
     // Close gaps using a closing kernel
     kernel = getStructuringElement(MORPH_RECT, Size(21,7));
     morphologyEx(thresh, cleaned, MORPH_CLOSE, kernel);
@@ -125,17 +128,19 @@ void CV_Main::BarcodeDetect(Mat &frame) {
     // Extract all contours
     findContours(cleaned, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
-    // Find the largest contour
     for (int i = 0; i < contours.size(); i++) {
+        //Draw all contours
         drawContours(frame, contours, i, CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
-//        if (max_area < contour_area) {
-//            max_area = contour_area;
-//            largest_cont_index = i;
-//        }
+
+        // Find the largest contour
+        /*if (max_area < contour_area) {
+            max_area = contour_area;
+            largest_cont_index = i;
+        }*/
     }
 
     // Draw the largest contour
-//    drawContours(frame, contours, largest_cont_index, CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
+    //drawContours(frame, contours, largest_cont_index, CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
 }
 
 void CV_Main::ReleaseMats() {

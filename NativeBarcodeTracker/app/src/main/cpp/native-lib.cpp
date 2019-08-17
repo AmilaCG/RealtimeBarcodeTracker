@@ -9,19 +9,6 @@ static CV_Main app;
 extern "C" {
 #endif
 
-jint JNI_OnLoad(JavaVM *vm, void *) {
-    // We need to store a reference to the Java VM so that we can call back
-    app.SetJavaVM(vm);
-    return JNI_VERSION_1_6;
-}
-
-JNIEXPORT void JNICALL
-Java_com_amilaabeygunasekara_nativebarcodetracker_MainActivity_onCreateJNI(
-        JNIEnv *env, jobject clazz, jobject activity, jobject j_asset_manager) {
-    app.OnCreate(env, activity);
-    app.SetAssetManager(AAssetManager_fromJava(env, j_asset_manager));
-}
-
 // Alot of stuff depends on the m_frame_buffer being loaded
 // this is done in SetNativeWindow
 JNIEXPORT void JNICALL

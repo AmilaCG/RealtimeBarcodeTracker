@@ -2,7 +2,6 @@
 #define OPENCV_NDK_CV_MAIN_H
 
 // Android
-#include <android/asset_manager.h>
 #include <android/native_window.h>
 #include <jni.h>
 // OpenCV
@@ -12,9 +11,6 @@
 #include "Image_Reader.h"
 #include "Native_Camera.h"
 #include "Util.h"
-// C Libs
-#include <unistd.h>
-#include <time.h>
 // STD Libs
 #include <cstdlib>
 #include <string>
@@ -34,27 +30,8 @@ public:
 
     CV_Main &operator=(const CV_Main &other) = delete;
 
-    // Lets us know when app has started passing in VM info
-    void OnCreate(JNIEnv *env, jobject caller_activity);
-
-    // TODO
-    // Disconnect from service
-    void OnPause();
-
-    // TODO
-    // Cleanup
-    void OnDestroy();
-
-    // Cache the Java VM used from the Java layer.
-    void SetJavaVM(JavaVM *pjava_vm) { java_vm = pjava_vm; }
-
     // sets Surface buffer reference pointer
     void SetNativeWindow(ANativeWindow *native_indow);
-
-    // sets Surface buffer reference pointer
-    void SetAssetManager(AAssetManager *asset_manager) {
-        m_aasset_manager = asset_manager;
-    };
 
     void SetUpCamera();
 
@@ -65,11 +42,6 @@ public:
     void ReleaseMats();
 
 private:
-    // Cached Java VM, caller activity object
-    JavaVM *java_vm;
-    jobject calling_activity_obj;
-    jmethodID on_callback;
-
     // holds native window to write buffer too
     ANativeWindow *m_native_window;
 
@@ -87,9 +59,6 @@ private:
     AImage *m_image;
 
     volatile bool m_camera_ready;
-
-    // used to hold reference to assets in assets folder
-    AAssetManager *m_aasset_manager;
 
     // OpenCV values
     Mat display_mat;

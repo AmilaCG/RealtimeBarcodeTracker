@@ -9,12 +9,6 @@ CV_Main::CV_Main()
 };
 
 CV_Main::~CV_Main() {
-    // clean up VM and callback handles
-    JNIEnv *env;
-    java_vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6);
-    env->DeleteGlobalRef(calling_activity_obj);
-    calling_activity_obj = nullptr;
-
     // ACameraCaptureSession_stopRepeating(m_capture_session);
     if (m_native_camera != nullptr) {
         delete m_native_camera;
@@ -32,22 +26,6 @@ CV_Main::~CV_Main() {
         m_image_reader = nullptr;
     }
 }
-
-void CV_Main::OnCreate(JNIEnv *env, jobject caller_activity) {
-    // Need to create an instance of the Java activity
-    calling_activity_obj = env->NewGlobalRef(caller_activity);
-
-    // Need to enter package and class to find Java class
-    jclass handler_class = env->GetObjectClass(caller_activity);
-
-    // Create function pointeACameraManager_getCameraCharacteristicsr to use for
-    // on_loaded callbacks
-    // on_callback = env->GetMethodID(handler_class, "JAVA_FUNCTION", "()V");
-}
-
-void CV_Main::OnPause() {}
-
-void CV_Main::OnDestroy() {}
 
 void CV_Main::SetNativeWindow(ANativeWindow *native_window) {
     // Save native window
@@ -149,15 +127,15 @@ void CV_Main::BarcodeDetect(Mat &frame) {
 
     // Find the largest contour
     for (int i = 0; i < contours.size(); i++) {
-        //drawContours(frame, contours, i, CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
-        if (max_area < contour_area) {
-            max_area = contour_area;
-            largest_cont_index = i;
-        }
+        drawContours(frame, contours, i, CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
+//        if (max_area < contour_area) {
+//            max_area = contour_area;
+//            largest_cont_index = i;
+//        }
     }
 
     // Draw the largest contour
-    drawContours(frame, contours, largest_cont_index, CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
+//    drawContours(frame, contours, largest_cont_index, CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
 }
 
 void CV_Main::ReleaseMats() {

@@ -90,7 +90,7 @@ bool Native_Camera::MatchCaptureSizeRequest(ImageFormat *resView, int32_t width,
             metadata, ACAMERA_SCALER_AVAILABLE_STREAM_CONFIGURATIONS, &entry);
     // format of the data: format, width, height, input?, type int32
     bool foundIt = false;
-    Display_Dimension foundRes(1000, 1000); // max resolution for current gen phones
+    Display_Dimension foundRes(4000, 3000); // max resolution for current gen phones
 
     for (int i = 0; i < entry.count; ++i) {
         int32_t input = entry.data.i32[i * 4 + 3];
@@ -113,11 +113,11 @@ bool Native_Camera::MatchCaptureSizeRequest(ImageFormat *resView, int32_t width,
         resView->height = foundRes.org_height();
     } else {
         if (disp.IsPortrait()) {
-            resView->width = 480;
-            resView->height = 640;
+            resView->width = 600;
+            resView->height = 800;
         } else {
-            resView->width = 640;
-            resView->height = 480;
+            resView->width = 800;
+            resView->height = 600;
         }
     }
     resView->format = AIMAGE_FORMAT_YUV_420_888;

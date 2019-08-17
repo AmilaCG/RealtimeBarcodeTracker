@@ -91,9 +91,6 @@ void CV_Main::CameraLoop() {
 
 void CV_Main::BarcodeDetect(Mat &frame) {
     int ddepth = CV_16S;
-    double contour_area = 0;
-    double max_area = 0;
-    int largest_cont_index = 0;
 
     // Convert to grayscale
     cvtColor(frame, frame_gray, CV_RGBA2GRAY);
@@ -128,19 +125,13 @@ void CV_Main::BarcodeDetect(Mat &frame) {
     // Extract all contours
     findContours(cleaned, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
-    for (int i = 0; i < contours.size(); i++) {
-        //Draw all contours
-        drawContours(frame, contours, i, CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
-
-        // Find the largest contour
-        /*if (max_area < contour_area) {
-            max_area = contour_area;
-            largest_cont_index = i;
-        }*/
-    }
+    // Sort contours in ascending order
+    std::sort(contours.begin(), contours.end(), [](const vector<Point>& c1, const vector<Point>& c2) {
+        return contourArea(c1, false) < contourArea(c2, false);
+    });
 
     // Draw the largest contour
-    //drawContours(frame, contours, largest_cont_index, CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
+    drawContours(frame, contours, int(contours.size()-1), CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
 }
 
 void CV_Main::ReleaseMats() {

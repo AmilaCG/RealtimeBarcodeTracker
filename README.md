@@ -26,7 +26,7 @@ To make compiling faster and to minimize the project size I only have it load an
 
 ## Acknowledgments
 
-[CV_Main.cpp](NativeBarcodeTracker/app/src/main/cpp/CV_Main.cpp), [CV_Main.h](NativeBarcodeTracker/app/src/main/cpp/CV_Main.h), [NativeCamera.cpp](NativeBarcodeTracker/app/src/main/cpp/NativeCamera.cpp), [NativeCamera.h](NativeBarcodeTracker/app/src/main/cpp/NativeCamera.h) and [Util.h](NativeBarcodeTracker/app/src/main/cpp/Util.h) were initially taken from [sjfricke/OpenCV-NDK](https://github.com/sjfricke/OpenCV-NDK) project. It helped a lot to understand the implementation of the NDK camera along with the native surface window.  
+[CV_Main.cpp](NativeBarcodeTracker/app/src/main/cpp/CV_Main.cpp), [CV_Main.h](NativeBarcodeTracker/app/src/main/cpp/CV_Main.h), [Native_Camera.cpp](NativeBarcodeTracker/app/src/main/cpp/Native_Camera.cpp), [Native_Camera.h](NativeBarcodeTracker/app/src/main/cpp/Native_Camera.h) and [Util.h](NativeBarcodeTracker/app/src/main/cpp/Util.h) were initially taken from [sjfricke/OpenCV-NDK](https://github.com/sjfricke/OpenCV-NDK) project. It helped a lot to understand the implementation of the NDK camera along with the native surface window.  
 
 [Image_Reader.cpp](NativeBarcodeTracker/app/src/main/cpp/Image_Reader.cpp) and [Image_Reader.h](NativeBarcodeTracker/app/src/main/cpp/Image_Reader.h) were taken from [googlesamples/android-ndk/camera](https://github.com/googlesamples/android-ndk/tree/master/camera) project. Google NDK camera sample is also a great source to understand the NDK camera implementation.  
 

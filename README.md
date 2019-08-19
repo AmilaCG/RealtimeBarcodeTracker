@@ -23,3 +23,11 @@ To make compiling faster and to minimize the project size I only have it load an
 
 - In the [build.gradle](NativeBarcodeTracker/app/build.gradle#L16#L19) file add `, "-DANDROID_ABI=armeabi-v7a"` in arguments and `, armeabi-v7a` in abi-filters. (You can also replace it with `arm64-v8a`)
 - Go into the downloaded OpenCV Android SDK and copy `OpenCV-android-sdk/sdk/native/libs/armeabi-v7a/libopencv_java3.so` file into [jniLibs](NativeBarcodeTracker/app/src/main/jniLibs) folder by creating a directory named `armeabi-v7a`.
+
+## Acknowledgments
+
+[CV_Main.cpp](NativeBarcodeTracker/app/src/main/cpp/CV_Main.cpp), [CV_Main.h](NativeBarcodeTracker/app/src/main/cpp/CV_Main.h), [NativeCamera.cpp](NativeBarcodeTracker/app/src/main/cpp/NativeCamera.cpp), [NativeCamera.h](NativeBarcodeTracker/app/src/main/cpp/NativeCamera.h) and [Util.h](NativeBarcodeTracker/app/src/main/cpp/Util.h) were initially taken from [sjfricke/OpenCV-NDK](https://github.com/sjfricke/OpenCV-NDK) project. It helped a lot to understand the implementation of the NDK camera along with the native surface window.  
+
+[Image_Reader.cpp](NativeBarcodeTracker/app/src/main/cpp/Image_Reader.cpp) and [Image_Reader.h](NativeBarcodeTracker/app/src/main/cpp/Image_Reader.h) were taken from [googlesamples/android-ndk/camera](https://github.com/googlesamples/android-ndk/tree/master/camera) project. Google NDK camera sample is also a great source to understand the NDK camera implementation.  
+
+OpenCV algorithm initially taken from https://www.pyimagesearch.com/2014/11/24/detecting-barcodes-images-python-opencv/ tutorial. It will explain the algorithm step-by-step.

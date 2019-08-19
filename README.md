@@ -30,4 +30,4 @@ To make compiling faster and to minimize the project size I only have it load an
 
 [Image_Reader.cpp](NativeBarcodeTracker/app/src/main/cpp/Image_Reader.cpp) and [Image_Reader.h](NativeBarcodeTracker/app/src/main/cpp/Image_Reader.h) were taken from [googlesamples/android-ndk/camera](https://github.com/googlesamples/android-ndk/tree/master/camera) project. Google NDK camera sample is also a great source to understand the NDK camera implementation.  
 
-OpenCV algorithm initially taken from https://www.pyimagesearch.com/2014/11/24/detecting-barcodes-images-python-opencv/ tutorial. It will explain the algorithm step-by-step.
+OpenCV barcode detection algorithm initially taken from https://www.pyimagesearch.com/2014/11/24/detecting-barcodes-images-python-opencv/ tutorial. It will explain the algorithm step-by-step.

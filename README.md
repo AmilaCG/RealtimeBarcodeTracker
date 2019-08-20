@@ -7,6 +7,10 @@ This uses Android NDK Camera API to access the camera from the native (C++) laye
 Using OpenCV to generate the bounding box with some image processing.  
 This NDK solution will give much better fps rate rather than using OpenCV on the Java layer (with CameraBridgeViewBase.CvCameraViewListener2, can be found in "BarcodeTrackingJava" branch).
 
+## Demo
+
+![demo gif](demo.gif)
+
 ## Prerequisites
 
 - Android API 24 (Nougat) or greater

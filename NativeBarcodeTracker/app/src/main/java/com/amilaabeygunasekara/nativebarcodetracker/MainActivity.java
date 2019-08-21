@@ -2,7 +2,6 @@ package com.amilaabeygunasekara.nativebarcodetracker;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Surface;
@@ -39,11 +38,11 @@ public class MainActivity extends Activity {
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
                 if (ContextCompat.checkSelfPermission(
-                        MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    requestCameraPermission();
-                } else {
+                        MainActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     // Sends surface buffer to NDK
                     setSurface(surfaceHolder.getSurface());
+                } else {
+                    requestCameraPermission();
                 }
             }
 

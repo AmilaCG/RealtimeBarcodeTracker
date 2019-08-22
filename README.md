@@ -1,11 +1,11 @@
-# Realtime Barcode Tracker (Android)
+# Real-time Barcode Tracker (Android NDK + OpenCV)
 The goal of this project is to track and decode multiple barcodes and show bounding boxes around them.
 
 Currently this can detect a single barcode and display a bounding box around it in realtime.  
 
 This uses Android NDK Camera API to access the camera from the native (C++) layer and then draw the preview on a SurfaceView using the NDK ANativeWindow.  
 Using OpenCV to generate the bounding box with some image processing.  
-This NDK solution will give much better fps rate rather than using OpenCV on the Java layer (with CameraBridgeViewBase.CvCameraViewListener2, can be found in "BarcodeTrackingJava" branch).
+This NDK solution will give much better FPS rather than using OpenCV on the Java layer (with CameraBridgeViewBase.CvCameraViewListener2, can be found in "BarcodeTrackingJava" branch).
 
 ## Demo
 
@@ -34,4 +34,4 @@ To make compiling faster and to minimize the project size I only have it load an
 
 [Image_Reader.cpp](NativeBarcodeTracker/app/src/main/cpp/Image_Reader.cpp) and [Image_Reader.h](NativeBarcodeTracker/app/src/main/cpp/Image_Reader.h) were taken from [googlesamples/android-ndk/camera](https://github.com/googlesamples/android-ndk/tree/master/camera) project. Google NDK camera sample is also a great source to understand the NDK camera implementation.  
 
-OpenCV barcode detection algorithm initially taken from https://www.pyimagesearch.com/2014/11/24/detecting-barcodes-images-python-opencv/ tutorial. It will explain the algorithm step-by-step.
+OpenCV barcode detection algorithm initially taken from https://www.pyimagesearch.com/2014/11/24/detecting-barcodes-images-python-opencv/ tutorial. It explains the algorithm step-by-step.
